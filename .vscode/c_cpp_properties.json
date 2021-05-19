@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "linux",
+            "includePath": [
+                "./Middlewares/Third_Party/LwIP/src/include/",
+                "./Middlewares/Third_Party/LwIP/system",
+                "./Drivers/CMSIS/Include",
+                "./Core/Inc",
+                "./Drivers/STM32F7xx_HAL_Driver/Inc",
+                "./Drivers/CMSIS/Device/ST/STM32F7xx/Include",
+                "./LWIP/App",
+                "./LWIP/Target"
+            ],
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}
