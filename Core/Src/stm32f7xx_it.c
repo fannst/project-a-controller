@@ -61,6 +61,8 @@
 /* USER CODE BEGIN EV */
 extern Stepper_t g_Stepper0;
 extern Stepper_t g_Stepper1;
+extern Stepper_t g_Stepper2;
+extern Stepper_t g_Stepper3;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -209,6 +211,14 @@ void TIM3_IRQHandler (void) {
 
 void TIM2_IRQHandler (void) {
   Stepper_ISRHandler (&g_Stepper1);
+}
+
+void TIM4_IRQHandler (void) {
+  Stepper_ISRHandler (&g_Stepper2);
+}
+
+void TIM5_IRQHandler (void) {
+  Stepper_ISRHandler (&g_Stepper3);
 }
 
 /* USER CODE END 1 */

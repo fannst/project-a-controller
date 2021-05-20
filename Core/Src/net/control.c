@@ -117,7 +117,7 @@ static void Control_HandleStepperEnableDisable (Control_TCPSession_t *session, c
 
         // Checks if there is an next one, if so set it to the move variable,
         //  else we will set it to null.
-        enadisa = (enadisa->HasNext ? (ControlPkt_StepperMoveTo_t *) enadisa->Next : NULL);
+        enadisa = (ControlPkt_EnableDisable_t *) (enadisa->HasNext ? (ControlPkt_StepperMoveTo_t *) enadisa->Next : NULL);
     } while (enadisa != NULL);
 }
 
@@ -155,7 +155,7 @@ static void Control_HandleStepperInfoRequest (Control_TCPSession_t *session, con
 
         info->HasNext = (i + 1 < g_StepperCount);
 
-        info = info->Next;
+        info = (ControlPkt_StepperInfo_t *) info->Next;
     }
 
     // Sends the response packet.
@@ -201,7 +201,7 @@ static err_t Control_RecvHandler (void *u, struct tcp_pcb *pcb, struct pbuf *p, 
             // Reads the total length of the packet in the buffer.
             uint16_t totalPktLength = 0;
             if (RingBuffer_Peek (session->RingBuffer, (uint8_t *) &totalPktLength, 2) != RingBuffer_Err_OK) {
-                return;
+                return ERR_MEM;
             }
 
             // If there is not enough data for the single expected packet, break the loop. 
@@ -264,7 +264,7 @@ static err_t Control_AcceptHandler (void *u, struct tcp_pcb *pcb, err_t err) {
     //  set the error handler, and the polling interval.
     tcp_arg (pcb, (void *) session);
     tcp_setprio (pcb, TCP_PRIO_MIN);
-    tcp_recv (pcb, (tcp_recv_fn *) Control_RecvHandler);
+    tcp_recv (pcb, Control_RecvHandler);
     tcp_err (pcb, NULL);
     tcp_poll (pcb, NULL, 4);
 

@@ -3,7 +3,7 @@
 /// Printf version which is meant for socket connections.
 void ip_printf (ip_addr_t addr, const char *fmt, ...) {
     // Prints the address prefix.
-    printf ("[%u : %u.%u.%u.%u] -> ",
+    printf ("[%lu : %u.%u.%u.%u] -> ",
         HAL_GetTick (),
         ip4_addr_get_byte (&addr, 0),
         ip4_addr_get_byte (&addr, 1),

@@ -45,10 +45,34 @@ TIM_HandleTypeDef g_Tim2 = {
   }
 };
 
+TIM_HandleTypeDef g_Tim4 = {
+  .Instance = TIM4,
+  .Init = {
+    .Prescaler = 54,
+    .CounterMode = TIM_COUNTERMODE_UP,
+    .Period = 0,
+    .ClockDivision = TIM_CLOCKDIVISION_DIV1,
+    .RepetitionCounter = 0,
+    .AutoReloadPreload = 0
+  }
+};
+
+TIM_HandleTypeDef g_Tim5 = {
+  .Instance = TIM5,
+  .Init = {
+    .Prescaler = 54,
+    .CounterMode = TIM_COUNTERMODE_UP,
+    .Period = 0,
+    .ClockDivision = TIM_CLOCKDIVISION_DIV1,
+    .RepetitionCounter = 0,
+    .AutoReloadPreload = 0
+  }
+};
+
 Stepper_t g_Stepper0 = STEPPER_NEW (200, 2000, 2, 0, STEPPER0_GPIO, STEPPER0_EN_PIN, STEPPER0_PU_PIN, STEPPER0_DIR_PIN, &g_Tim3);
 Stepper_t g_Stepper1 = STEPPER_NEW (200, 4000, 2, 0, STEPPER1_GPIO, STEPPER1_EN_PIN, STEPPER1_PU_PIN, STEPPER1_DIR_PIN, &g_Tim2);
-Stepper_t g_Stepper2 = {};
-Stepper_t g_Stepper3 = {};
+Stepper_t g_Stepper2 = STEPPER_NEW (200, 4000, 2, 0, STEPPER2_GPIO, STEPPER2_EN_PIN, STEPPER2_PU_PIN, STEPPER2_DIR_PIN, &g_Tim4);
+Stepper_t g_Stepper3 = STEPPER_NEW (200, 4000, 2, 0, STEPPER3_GPIO, STEPPER3_EN_PIN, STEPPER3_PU_PIN, STEPPER3_DIR_PIN, &g_Tim5);
 Stepper_t g_Stepper4 = {};
 Stepper_t g_Stepper5 = {};
 
@@ -89,6 +113,8 @@ void Setup_RCC (void) {
 
     __TIM2_CLK_ENABLE ();
     __TIM3_CLK_ENABLE ();
+    __TIM4_CLK_ENABLE ();
+    __TIM5_CLK_ENABLE ();
 }
 
 /// Configures all the GPIO's.
@@ -124,6 +150,8 @@ void Setup_GPIO (void) {
 
   Stepper_Init (&g_Stepper0, &GPIO_InitStruct);
   Stepper_Init (&g_Stepper1, &GPIO_InitStruct);
+  Stepper_Init (&g_Stepper2, &GPIO_InitStruct);
+  Stepper_Init (&g_Stepper3, &GPIO_InitStruct);
 }
 
 /// Configures all the UART's.
@@ -149,10 +177,18 @@ void Setup_TIMs (void) {
 
   if (HAL_TIM_Base_Init (&g_Tim3) != HAL_OK)
     Error_Handler ();
+
+  if (HAL_TIM_Base_Init (&g_Tim4) != HAL_OK)
+    Error_Handler ();
+
+  if (HAL_TIM_Base_Init (&g_Tim5) != HAL_OK)
+    Error_Handler ();
 }
 
 /// Configures the NVIC.
 void Setup_NVIC (void) {
   NVIC_EnableIRQ (TIM2_IRQn);
   NVIC_EnableIRQ (TIM3_IRQn);
+  NVIC_EnableIRQ (TIM4_IRQn);
+  NVIC_EnableIRQ (TIM5_IRQn);
 }

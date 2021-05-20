@@ -78,6 +78,7 @@ void Stepper_Move (Stepper_t *stepper, int32_t pos) {
     stepper->moving = 1;
     stepper->target_position = pos;
 
+    // Calculates the number of steps to perform, and sets the target stepper direction.
     if (pos > stepper->current_position) {
         stepper->total_steps = pos - stepper->current_position;
         Stepper_SetDir (stepper, Stepper_Forwards);
@@ -86,11 +87,13 @@ void Stepper_Move (Stepper_t *stepper, int32_t pos) {
         Stepper_SetDir (stepper, Stepper_Backwards);
     }
 
+    // Makes sure we're doing steps with even numbers.
     if ((stepper->total_steps % 2) != 0) {
         ++stepper->total_steps;
         pos = (stepper->dir == Stepper_Forwards) ? pos + 1 : pos - 1;
     }
 
+    // Calculates the ramp up and down.
     uint32_t rampStepSize = (stepper->max_sps - stepper->min_sps) / stepper->sps_increment;
     if (rampStepSize > (stepper->total_steps / 2)) {
         stepper->stop_speedup_at = stepper->start_slowdown_at = stepper->total_steps / 2;
@@ -99,12 +102,14 @@ void Stepper_Move (Stepper_t *stepper, int32_t pos) {
         stepper->start_slowdown_at = stepper->total_steps - rampStepSize;
     }
 
+    // Sets the done steps to zero, and current sps to initial value, after which we
+    //  enable the stepper (if auto mode).
     stepper->done_steps = 0;
     stepper->current_sps = stepper->min_sps;
-
     if (stepper->auto_enabled)
         Stepper_SetEnabled (stepper, true);
 
+    // Sets the timer counter to zero, and fills the autoreload register with the initial speed value.
     __HAL_TIM_SET_COUNTER (stepper->TIM, 0);
     __HAL_TIM_SET_AUTORELOAD (stepper->TIM, 1000000 / (uint32_t) stepper->current_sps);
     if (HAL_TIM_Base_Start_IT (stepper->TIM) != HAL_OK)

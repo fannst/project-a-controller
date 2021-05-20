@@ -22,7 +22,7 @@ ST_FLASH_ARGS				+= 0x8000000
 
 # GCC Arguments
 GCC_ARGS						+= -Wall
-# GCC_ARGS						+= -Werror
+GCC_ARGS						+= -Werror
 
 GCC_ARGS						+= -mthumb
 GCC_ARGS						+= -mcpu=$(MCPU)

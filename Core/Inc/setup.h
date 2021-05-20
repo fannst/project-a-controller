@@ -23,6 +23,9 @@ void Setup_Steppers (void);
 /// Configures the TIMs.
 void Setup_TIMs (void);
 
+/// Configures the NVIC.
+void Setup_NVIC (void);
+
 #ifdef __cplusplus
 }
 #endif

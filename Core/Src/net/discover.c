@@ -14,21 +14,22 @@ static const char *DEVICE_NAME = "Project-A DEMO";
 
 /// The UDP discover packet receive callback.
 static err_t Discover_Recv_Callback (void *u, struct udp_pcb *pcb, struct pbuf *packet, ip_addr_t *a, uint16_t port) {
-    if (packet == NULL) return;
+    if (packet == NULL)
+      return ERR_OK;
 
     // Reinterprets the payload as an discovery packet, and checks if the packet is an request
     //  and if the DevideID's match, if not just return.
     DiscoverPkt_t *discoverPkt = (DiscoverPkt_t *) packet->payload;
     if ( !(discoverPkt->Flags & DiscoverPkt_Flag_Request)
     || (discoverPkt->DevID != DiscoverPkt_DevidID_ProjectA)) {
-        return;
+        return ERR_OK;
     }
 
     // Creates the response packet, which will contain the device name.
     uint16_t deviceNameLength = strlen (DEVICE_NAME) + 1 /* +1: 0 term */;
     struct pbuf *response = pbuf_alloc (PBUF_TRANSPORT, sizeof (DiscoverPkt_t) + sizeof (DiscoverPkt_Response_t) + deviceNameLength, PBUF_RAM);
     if (response == NULL) {
-        return;
+        return ERR_MEM;
     }
 
     DiscoverPkt_t *responseDiscoverPkt = (DiscoverPkt_t * ) response->payload;
