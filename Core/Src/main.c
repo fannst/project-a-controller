@@ -98,6 +98,10 @@ int main(void)
   Setup_RCC ();
   Setup_GPIO ();
   Setup_UART ();
+  Setup_TIMs ();
+  Setup_NVIC ();
+
+  Setup_Steppers ();
 
   /* USER CODE END SysInit */
 

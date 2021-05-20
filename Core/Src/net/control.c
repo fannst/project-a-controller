@@ -87,6 +87,9 @@ static void Control_HandleStepperMoveTo (Control_TCPSession_t *session, const Co
         ip_printf (pcb->remote_ip, "Moving motor %lu to %ld", move->Motor, move->Position);
 
         // Checks which motor it is, and moves it.
+        if (move->Motor < g_StepperCount) {
+            Stepper_Move (g_Steppers[move->Motor], move->Position);
+        }
 
         // Checks if there is an next one, if so set it to the move variable,
         //  else we will set it to null.
@@ -109,7 +112,7 @@ static void Control_HandleStepperEnableDisable (Control_TCPSession_t *session, c
         ip_printf (pcb->remote_ip, "%s Motor %u", (enadisa->Enable ? "Enabling" : "Disabling"), enadisa->Motor);
 
         if (enadisa->Motor < g_StepperCount) {
-            g_Steppers[enadisa->Motor]->enabled = enadisa->Enable;
+            Stepper_SetEnabled (g_Steppers[enadisa->Motor], enadisa->Enable);
         }
 
         // Checks if there is an next one, if so set it to the move variable,

@@ -23,6 +23,7 @@
 #include "stm32f7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "stepper.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +59,8 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-
+extern Stepper_t g_Stepper0;
+extern Stepper_t g_Stepper1;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -200,6 +202,14 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
+
+void TIM3_IRQHandler (void) {
+  Stepper_ISRHandler (&g_Stepper0);
+}
+
+void TIM2_IRQHandler (void) {
+  Stepper_ISRHandler (&g_Stepper1);
+}
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

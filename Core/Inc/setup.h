@@ -17,6 +17,12 @@ void Setup_GPIO (void);
 /// Configures all the UART's.
 void Setup_UART (void);
 
+/// Configures the steppers.
+void Setup_Steppers (void);
+
+/// Configures the TIMs.
+void Setup_TIMs (void);
+
 #ifdef __cplusplus
 }
 #endif

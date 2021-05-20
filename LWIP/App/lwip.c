@@ -59,9 +59,9 @@ void MX_LWIP_Init(void)
   lwip_init();
 
   /* IP addresses initialization with DHCP (IPv4) */
-  ipaddr.addr = 0;
-  netmask.addr = 0;
-  gw.addr = 0;
+  IP4_ADDR (&ipaddr, 192, 168, 2, 44);
+  IP4_ADDR (&netmask, 255, 255, 255, 0);
+  IP4_ADDR (&gw, 192, 168, 2, 1);
 
   /* add the network interface (IPv4/IPv6) without RTOS */
   netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
@@ -86,7 +86,7 @@ void MX_LWIP_Init(void)
   /* Create the Ethernet link handler thread */
 
   /* Start DHCP negotiation for a network interface (IPv4) */
-  dhcp_start(&gnetif);
+  // dhcp_start(&gnetif);
 
 /* USER CODE BEGIN 3 */
 
